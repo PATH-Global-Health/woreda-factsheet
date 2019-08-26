@@ -14,6 +14,7 @@ from libs.title_helper import Title
 from libs.his_helper import HIS
 from libs.supply_chain_helper import SCM
 from libs.health_service_delivery_helper import HSD
+from libs.utils import MAX_HF
 
 
 class FactSheet:
@@ -31,7 +32,7 @@ class FactSheet:
     def __generate_title(self, row):
         data = Title.get_data(row)
 
-        t = Table(data, colWidths='*')
+        t = Table(data, colWidths=['*', 60*mm])
         t.setStyle(Title.get_table_style())
         self.__story.append(t)
 
@@ -50,9 +51,18 @@ class FactSheet:
         t.setStyle(MalariaBurden.get_table_style())
         self.__story.append(t)
 
-        data = MalariaBurden.get_chart_data(row)
-        t = Table(data, colWidths='*',  spaceBefore=2)
-        t.setStyle(MalariaBurden.get_chart_table_style())
+        woreda_hp = Dataset.merged_woreda_hp_mb()
+        woreda_hp = woreda_hp[(woreda_hp['woreda'] == row['woreda'])]
+
+        data = MalariaBurden.get_chart_data(row, woreda_hp)
+        if woreda_hp.shape[0] > MAX_HF:
+            t = Table(data, colWidths=[None, None, 12*mm,
+                                       None, 12*mm, None, 12*mm],  spaceBefore=2)
+        else:
+            t = Table(data, colWidths='*',  spaceBefore=2)
+
+        t.setStyle(MalariaBurden.get_chart_table_style(
+            woreda_hp.shape[0], data.__len__()))
         self.__story.append(t)
 
     def __generate_hr(self, row):
@@ -135,7 +145,7 @@ class FactSheet:
             self.__generate_hsd(row)
             self.__story.append(PageBreak())
             # i += 1
-            # if i == 25:
+            # if i == 15:
             #     break
 
         print('Writing to {}. Please wait...'.format(

@@ -15,7 +15,8 @@ from enum import Enum
 
 IMAGE_WIDTH = 200
 IMAGE_HEIGHT = 200
-MEDIUM_FONT_SIZE = 13
+MEDIUM_FONT_SIZE = 11
+MAX_HF = 30
 
 
 class Align(Enum):
@@ -78,6 +79,8 @@ class Utils:
             ' +H[./]*C': '',
             ' *health *post': '',
             ' *heslth *post': '',
+            ' *Haelth *Post': '',
+            ' *Health *Poat': '',
             ' *hospital': '',
             ' +h[./]*p': '',
             ' {2,}': ''}
@@ -109,6 +112,24 @@ class Utils:
         result = pd.concat(splited).sort_index(axis=0)
 
         return (result[label_field_name], result[value_field_name])
+
+    @staticmethod
+    def col2row(data):
+        d = []
+        i = 0
+        c = 0
+        r = -1
+        for index, wr in data.iterrows():
+            if i % 3 == 0:
+                d.append(
+                    [(Utils.short(wr['name_hp']), wr['mb_2008_y']), ('', ''), ('', ''), ('', '')])
+                c = 1
+                r += 1
+            else:
+                d[r][c] = (Utils.short(wr['name_hp']), wr['mb_2008_y'])
+                c += 1
+            i += 1
+        return d
 
     @staticmethod
     def fixOverLappingText(text):
@@ -160,8 +181,9 @@ class Utils:
             if np.isreal(val) and np.isnan(val):
                 val = 0
             plt.text(i, val, int(val), horizontalalignment='center',
-                     verticalalignment='bottom', fontdict={'fontweight': 500, 'size': MEDIUM_FONT_SIZE})
+                     verticalalignment='bottom', rotation=70, fontdict={'fontweight': 500, 'size': MEDIUM_FONT_SIZE})
 
+        plt.ylim(bottom=0)
         plt.ylabel(ylabel)
         plt.gca().set_xticklabels(category, rotation=60, horizontalalignment='right')
 
@@ -225,6 +247,7 @@ class Utils:
             patches.append(mpatches.Patch(
                 color=color_label[i][0], label=color_label[i][1]))
         plt.xticks(X, categories)
+        plt.ylim(bottom=0)
 
         ax.grid(zorder=0)
 
@@ -232,6 +255,7 @@ class Utils:
         for chart in charts:
             for bar in chart:
                 w, h = bar.get_width(), bar.get_height()
+                h = 0 if np.isnan(h) else h
                 plt.text(bar.get_x() + w/2, bar.get_y() + h + 0.3,
                          "{:.0f}".format(h), ha="center",
                          va="center", fontdict={'fontweight': 500, 'size': MEDIUM_FONT_SIZE, 'color':  'black'})
@@ -253,4 +277,5 @@ class Utils:
         fig.savefig(imgdata, format='png')
         imgdata.seek(0)  # rewind the data
         plt.close()
-        return Image(imgdata, width=IMAGE_HEIGHT, height=IMAGE_WIDTH, kind='proportional')
+
+        return Image(imgdata, width=IMAGE_WIDTH, height=IMAGE_HEIGHT, kind='proportional')

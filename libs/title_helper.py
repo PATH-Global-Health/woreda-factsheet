@@ -23,7 +23,7 @@ class Title():
              ("TEXTCOLOR", (1, 0), (1, 0),
               colors.Color(0, 133/255, 183/255)),
              ("ALIGN", (1, 0), (1, 0), 'RIGHT'),
-             # ('GRID', (0, 0), (-1, -1), 0.5, colors.Color(91/255, 91/255, 93/255))
+             #  ('GRID', (0, 0), (-1, -1), 0.5, colors.Color(91/255, 91/255, 93/255))
              ])
 
     @staticmethod
@@ -48,17 +48,22 @@ class Title():
         header.drawOn(canvas, doc.leftMargin,
                       doc.height + doc.topMargin + h)
 
+        canvas.setLineWidth(.3)
+        #canvas.setStrokeColorRGB(0, 1, 0.3)
+        canvas.line(doc.leftMargin + 5.5, doc.bottomMargin-15,
+                    doc.width+14, doc.bottomMargin-15)
+
         # Footer
         canvas.drawImage('assets/images/SMMES.png',
-                         doc.leftMargin, doc.bottomMargin - 45, 158, 25)
+                         doc.leftMargin + 5, doc.bottomMargin - 45, 158, 25)
         canvas.drawImage('assets/images/WHO.png',
-                         doc.leftMargin + 183, doc.bottomMargin - 45, 63, 23)  # 183:- 158 + 25
+                         doc.leftMargin + 188, doc.bottomMargin - 45, 63, 23)  # 188:- 158 + 25 +5
         canvas.drawImage('assets/images/CHAI.png',
-                         doc.leftMargin + 271, doc.bottomMargin - 45, 43, 23)  # 271:- 183 + 63 + 25
+                         doc.leftMargin + 276, doc.bottomMargin - 45, 43, 23)  # 276:- 188 + 63 + 25
         canvas.drawImage('assets/images/TU.png',
-                         doc.leftMargin + 339, doc.bottomMargin - 45, 63, 23)  # 239:- 271 + 43 + 25
+                         doc.leftMargin + 344, doc.bottomMargin - 45, 63, 23)  # 344:- 276 + 43 + 25
         canvas.drawImage('assets/images/PATH.png',
-                         doc.leftMargin + 427, doc.bottomMargin - 45, 49, 19)  # 427:- 339 + 63 + 50
+                         doc.leftMargin + 432, doc.bottomMargin - 45, 49, 19)  # 432:- 344 + 63 + 50
 
         # Page number
         canvas.setFont("mb", 7)

@@ -116,9 +116,9 @@ class HumanResource():
 
     @staticmethod
     def get_tw_data(row):
-        return [[Utils.p('Trained staff avilability', 8, True, align=Align.LEFT), '', '', '', '', '', '', ''],
+        return [[Utils.p('Trained staff (in previous 12 months) avilability', 8, True, align=Align.LEFT), '', '', '', '', '', '', ''],
                 [' Woreda level', 'Vector control', 'Diagnosis', 'Treatment',
-                    'Sever case Mx', 'IRT', 'iCCM', 'Supply management'],
+                    'Severe case mngt. ', 'IRT', 'iCCM', 'Supply management'],
                 ['', Utils.n(row['vect']), Utils.n(row['dx']), Utils.n(row['rx']), Utils.n(
                     row['mxsever']), Utils.n(row['irt']), Utils.n(row['iccm']), Utils.n(row['scm'])]
                 ]
@@ -154,7 +154,7 @@ class HumanResource():
     @staticmethod
     def get_thc_data(row):
         data = [[' Health center level', 'HCs', 'Vector control', 'Diagnosis', 'Treatment',
-                 'Sever case Mx', 'IRT', 'M&E', 'ICCM', 'Supply Management', 'SBCC']]
+                 'Severe case mngt.', 'IRT', 'M&E', 'ICCM', 'Supply Management', 'SBCC']]
 
         woreda_hc = Dataset.merged_woreda_hc()
 

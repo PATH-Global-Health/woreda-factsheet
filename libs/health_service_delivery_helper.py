@@ -53,7 +53,7 @@ class HSD():
         data = [
             [Utils.p('Malaria diagnosis method used by HCs',
                      8, True, align=Align.LEFT), '', '', ''],
-            ['', Utils.p('Microscop', 7, True, '#5A5A5C'), Utils.p(
+            ['', Utils.p('Light Microscopy', 7, True, '#5A5A5C'), Utils.p(
                 'RDT', 7, True, '#5A5A5C'), Utils.p('Both', 7, True, '#5A5A5C')]
         ]
 

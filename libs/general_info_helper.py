@@ -7,7 +7,7 @@ from libs.utils import Utils, Align
 class GeneralInfo():
     @staticmethod
     def generate_chart(row):
-        eth_image = 'assets/images/Ethiopia.png'
+        eth_image = 'assets/images/OptimizationDistricts.png'
         return Image(eth_image, width=200, height=200, kind='proportional')
 
     @staticmethod
@@ -21,7 +21,8 @@ class GeneralInfo():
                  Utils.p(row['num_HC']), ''],
                 [Utils.p('Health Posts', align=Align.LEFT),
                  Utils.p(row['num_HP']), ''],
-                [Utils.p('Population', align=Align.LEFT), Utils.p('-'), '']
+                [Utils.p('Population - 2008 EC', align=Align.LEFT),
+                 Utils.p(row['pop2008']), '']
                 ]
 
     @staticmethod
