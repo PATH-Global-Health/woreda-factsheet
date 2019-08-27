@@ -60,7 +60,7 @@ class HSD():
         woreda_hc = Dataset.merged_woreda_hc()
 
         for index, r in woreda_hc[woreda_hc['woreda'] == row['woreda']].iterrows():
-            data.append([Utils.p(r['hfname'], 7, align=Align.LEFT), Utils.p(
+            data.append([Utils.p(Utils.short(r['hfname']), 7, align=Align.LEFT), Utils.p(
                 r['dxmic'], 7), Utils.p(r['dxrdt'], 7), Utils.p(r['dxboth'], 7)])
 
         return data
