@@ -2,17 +2,20 @@ from reportlab.platypus import TableStyle, Image
 from reportlab.lib import colors
 
 from libs.utils import Utils, Align
+from libs.dataset_helper import Dataset
 
 
 class GeneralInfo():
     @staticmethod
-    def generate_chart(row):
-        eth_image = 'assets/images/OptimizationDistricts.png'
-        return Image(eth_image, width=200, height=200, kind='proportional')
+    def generate_map(row):
+        selected_district = Dataset.district_map[Dataset.district_map['wcode']
+                                                 == row['woreda']]
+
+        return Utils.generate_map(Dataset.region_map, Dataset.district_map, selected_district)
 
     @staticmethod
     def get_data(row):
-        return [['', '', GeneralInfo.generate_chart(row)],  # Utils.p('Contact person: {}'.format('+251...'), 7, True)
+        return [['', '', GeneralInfo.generate_map(row)],  # Utils.p('Contact person: {}'.format('+251...'), 7, True)
                 [Utils.p('I. General Information', 10,
                          True, '#0085B7', align=Align.LEFT), '', ''],
                 [Utils.p('Number of Health Facilities', 8,
@@ -42,5 +45,5 @@ class GeneralInfo():
              ('VALIGN', (-1, -6), (-1, -1), 'TOP'),
 
              # Entire table
-             #('GRID', (0, 0), (-1, -1), 0.5, colors.Color(91/255, 91/255, 93/255)),
+             # ('GRID', (0, 0), (-1, -1), 0.5, colors.Color(91/255, 91/255, 93/255)),
              ])

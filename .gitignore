@@ -1,5 +1,6 @@
 # PDF
 *.pdf
+libs/__pycache__
 
 # Django #
 *.log

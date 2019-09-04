@@ -132,7 +132,7 @@ class FactSheet:
         Dataset.woreda.sort_values(
             by=['region', 'zone', 'wname'], inplace=True)
 
-        i = 0
+        # i = 0
         total = len(Dataset.woreda)
         for index, row in tqdm(Dataset.woreda.iterrows(), total=total):
             self.__generate_title(row)

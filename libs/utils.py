@@ -1,3 +1,10 @@
+from enum import Enum
+from functools import reduce
+from collections import Counter
+from io import BytesIO
+from reportlab.platypus import Image
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus import Paragraph
 import numpy as np
 import pandas as pd
 import random
@@ -5,13 +12,11 @@ import re
 import squarify
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from reportlab.platypus import Paragraph
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.platypus import Image
-from io import BytesIO
-from collections import Counter
-from functools import reduce
-from enum import Enum
+from matplotlib.colors import ListedColormap
+from matplotlib.markers import MarkerStyle
+import rasterio
+import rasterio.plot
+import geopandas as gpd
 
 IMAGE_WIDTH = 200
 IMAGE_HEIGHT = 200
@@ -26,7 +31,6 @@ class Align(Enum):
 
 
 class Utils:
-
     @staticmethod
     def p(text, size=8, bold=False, color='#000', align=Align.CENTER):
 
@@ -266,6 +270,61 @@ class Utils:
                    bbox_to_anchor=(1, 0, 0, 1))
         plt.gca().set_xticklabels(categories, rotation=60, horizontalalignment='right')
         plt.rc('xtick', labelsize=MEDIUM_FONT_SIZE)
+
+        return Utils.generate_image(fig)
+
+    @staticmethod
+    def generate_map(region_map, district_map, selected_district=None):
+        fig, ax = plt.subplots(1, 2, figsize=(14, 8))
+        stratum_color = ['#aaa389', '#42c81d', '#f3f625', '#6c081f']
+
+        # Plot the raster image
+        with rasterio.open("assets/images/ETH_satellite_trimmed.tif") as raster:
+            rasterio.plot.show(raster, ax=ax[0], cmap='gist_earth')
+
+        # Plot the regions
+        region_map.geometry.boundary.plot(
+            color=None, edgecolor='black', linewidth=0.3, ax=ax[0])
+
+        # Draw all districts
+        district_map.plot(column='Group', cmap=ListedColormap(stratum_color),
+                          linewidth=0.3, ax=ax[0], edgecolor='black', categorical=True, legend=True, legend_kwds={'loc': 'lower right', 'framealpha': 1, 'fontsize': 16})
+
+        # Mark the target district and plot it in the second axis
+        if not selected_district.empty:
+            # take district's centroid
+            district_centroid = gpd.GeoDataFrame(
+                crs=None, geometry=[selected_district.centroid.iloc[0]])
+
+            # Buffer point and plot it
+            circle = gpd.GeoDataFrame(
+                crs=None, geometry=district_centroid.buffer(.6))
+
+            circle.plot(ax=ax[0], linewidth=2,
+                        facecolor='white', edgecolor='red', alpha=0.6)
+
+            # Draw the district separately in the second axis
+            selected_district.plot(ax=ax[1], cmap=ListedColormap(
+                stratum_color[int(selected_district.iloc[0]['Group'])]))
+
+            # Plot a point marker on top of the district using the district's centroid as a center
+            district_centroid.plot(ax=ax[0], color='red', markersize=1)
+
+        # custom legend text
+        labels = [
+            'Free (API 0)',
+            'Low (API 0-5)',
+            'Medium (API 5-100)',
+            'High (API >100)'
+        ]
+
+        leg = ax[0].get_legend()
+        for text, label in zip(leg.get_texts(), labels):
+            text.set_text(label)
+
+        # tick text size
+        for i in range(2):
+            ax[i].tick_params(labelsize=16)
 
         return Utils.generate_image(fig)
 
