@@ -63,7 +63,7 @@ pywaffle==0.2.1
 pyzmq==18.0.2
 qtconsole==4.5.2
 rasterio==1.0.26
-reportlab==3.5.55
+reportlab==3.6.13
 requests==2.31.0
 Rtree==0.8.3
 scipy==1.10.0
