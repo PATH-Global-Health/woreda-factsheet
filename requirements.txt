@@ -16,7 +16,7 @@ entrypoints==0.3
 Fiona==1.8.6
 freeze==1.0.10
 geopandas==0.5.1
-idna==2.8
+idna==3.7
 ipykernel==5.1.1
 ipython==8.10.0
 ipython-genutils==0.2.0
