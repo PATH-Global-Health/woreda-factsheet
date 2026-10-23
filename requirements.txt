@@ -3,7 +3,7 @@ appnope==0.1.0
 attrs==19.1.0
 backcall==0.1.0
 bleach==6.4.0
-certifi==2024.7.4
+certifi==2026.10.19
 chardet==3.0.4
 Click==7.0
 click-plugins==1.1.1
